@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
+from serpapi import GoogleSearch
+import json
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -32,14 +34,29 @@ def profile(request):
             p_form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
-
+        
+    
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    params = {
+    "api_key": "a88eda312e3c45af4a84767846dd8bb81b488550e47d93346b5c8525fdf77ce2",
+    "engine": "google_scholar_profiles",
+    "mauthors":  request.user.profile ,
+}
+
+    search = GoogleSearch(params)
+    results = search.get_dict()
+    profiles_json =json.dumps(results["profiles"])
+    profiles = json.loads(profiles_json)
+
+    #    return render(request, self.template_name, {'profiles': profiles})
+
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'profiles': profiles,
     }
 
     return render(request, 'users/profile.html', context)
