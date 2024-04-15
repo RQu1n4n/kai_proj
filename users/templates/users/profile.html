@@ -1,53 +1,62 @@
 {% extends "kaizen_web/base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
-        </div>
-      </div>
-      <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Profile Info</legend>
-              {{ u_form|crispy }}
-              {{ p_form|crispy }}
+    
+<main role="main">
 
-          </fieldset>
-          <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">Update</button>
-          </div>
-      </form>
-      <div class="container">
-        <div class="row">
-            <div class="col-xl-8">
-                {% for profile in profiles %}
-                  {% if profile.email == user.email %}
-                    <div class="card">
-                      <div class="card-body pb-0">
-                          <div class="row align-items-center">
-                              <div class="col-md-3">
-                                  <div class="text-center border-end">
-                                      <img src="{{ profile.thumbnail }}" class="img-fluid avatar-xxl rounded-circle" alt="">
-                                      <h4 class="text-primary font-size-20 mt-3 mb-2">{{ profile.name }}</h4>
-                                      <h5 class="text-muted font-size-13 mb-0"></h5>
-                                  </div>
-                              </div><!-- end col -->
-                              
-                          </div><!-- end row -->
-                      </div><!-- end card body -->
-                  </div><!-- end card -->
-                  {% endif %}
-                {% endfor %}
-                
-            </div><!-- end col -->
-        
-          
-        </div>
-        </div>
+  <meta name="viewport" content="width=device-width", initial-scale="2.0">
+  <link rel="stylesheet" href="static/profile.css">
+  
+<div class="container">
+      <h1>Profile Details</h1>
+      <h2>{{ author.name }}</h2>
+      <img src="{{ author.thumbnail }}" alt="Profile Thumbnail">
+      
+      <h3>Affiliations:</h3>
+      <p>{{ author.affiliations }}</p>
+      
+      <h3>Email:</h3>
+      <p>{{ author.email }}</p>
+      
+      <h3>Research Interests:</h3>
+      <ul>
+          {% for interest in author.interests %}
+              <li><a href="{{ interest.link }}" target="_blank">{{ interest.title }}</a></li>
+          {% endfor %}
+      </ul>
+    
+      
+      <h2>Articles:</h2>
+      <ul>
+        {% for article in articles %}
+          <li>
+            <a href="{{ article.link }}">{{ article.title }}</a><br>
+            Authors: {{ article.authors }}<br>
+            Publication: {{ article.publication }}<br>
+            Year: {{ article.year }}<br>
+            Cited By: {{ article.cited_by.value }}<br>
+          </li>
+        {% endfor %}
+      </ul>
+      
+      <h3>Cited By:</h3>
+      <p>All time: {{ author.cited_by.table.0.citations.all }}</p>
+      <p>Since 2016: {{ author.cited_by.table.0.citations.depuis_2016 }}</p>
+      
+      <h3>Public Access:</h3>
+      <p><a href="{{ author.public_access.link }}" target="_blank">Public Access Link</a></p>
+      
+      <h3>Co-Authors:</h3>
+      <ul>
+          {% for coauthor in author.co_authors %}
+              <li>
+                  <a href="{{ coauthor.link }}" target="_blank">{{ coauthor.name }}</a>,
+                  {{ coauthor.affiliations }}
+              </li>
+          {% endfor %}
+      </ul>   <!-- Example row of columns -->
+     
+    </div> <!-- /container -->
 
-    </div>
+</main>
+
 {% endblock content %}

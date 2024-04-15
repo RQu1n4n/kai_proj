@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% extends 'kaizen_web/base.html' %}
+{% block content %}
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="x-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,
+        initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'users/css/register.css' %}">        
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        
+    </head>
+    <body> 
+        <div class="wrapper">
+            <form method="POST" action= "{% url 'register' %}">
+                {% csrf_token %}
+
+                <h3 id = "form-title">Create an Account</h3>
+                <h2 id = "register">Register</h2> 
+                <div id="rectangle"></div>
+
+                <div class="input-box" id ="first-name">
+                    <input type="text" name='first_name' placeholder="First name" required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+                <div class="input-box" id="last-name">
+                    <input type="text" name='last_name' placeholder="Last name" required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+
+                <div class="input-box" id="email">
+                    <input type="text" name="email" placeholder="Email" required>
+                    <i class='bx bx-envelope'></i>
+                </div>
+
+                <div class="input-box" id = "password">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt' ></i>
+                </div>
+
+                <button id ="register-button" value = "Register" type="submit" class="btn"><p> Register </p></button>
+                
+                <div class="Signin-link">
+                    <p id = 'account'>|      Already Have an Account?
+                    <a href="{% url 'login' %}">
+                        <strong><bold>Login</strong></a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </body>
+
+</html>
+
+{% endblock %}
